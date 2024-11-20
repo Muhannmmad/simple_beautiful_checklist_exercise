@@ -14,8 +14,12 @@ class SharedPreferencesRepository implements DatabaseRepository {
   }
 
 
-  // Gibt die Items zurück.
-  Future<List<String>> getItems();
+  @override
+  Future<List<String>> getItems() async {
+    final prefs = await _prefs;
+    return prefs.getStringList(_keyItems) ?? [];
+  }
+
 
   // Fügt ein neues Item hinzu.
   Future<void> addItem(String item);

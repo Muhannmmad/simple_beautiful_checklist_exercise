@@ -13,13 +13,11 @@ class SharedPreferencesRepository implements DatabaseRepository {
     return items.length;
   }
 
-
   @override
   Future<List<String>> getItems() async {
     final prefs = await _prefs;
     return prefs.getStringList(_keyItems) ?? [];
   }
-
 
   @override
   Future<void> addItem(String item) async {
@@ -43,7 +41,15 @@ class SharedPreferencesRepository implements DatabaseRepository {
     }
   }
 
-  // Aktualisiert ein Item an einem bestimmten Index.
-  Future<void> editItem(int index, String newItem);
-}
+  @override
+  Future<void> editItem(int index, String newItem) async {
+    if (newItem.isNotEmpty) {
+      final prefs = await _prefs;
+      final items = prefs.getStringList(_keyItems) ?? [];
+      if (index >= 0 && index < items.length && !items.contains(newItem)) {
+        items[index] = newItem;
+        await prefs.setStringList(_keyItems, items);
+      }
+    }
+  }
 }

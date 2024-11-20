@@ -33,8 +33,15 @@ class SharedPreferencesRepository implements DatabaseRepository {
     }
   }
 
-  // Löscht ein Item an einem bestimmten Index.
-  Future<void> deleteItem(int index);
+  @override
+  Future<void> deleteItem(int index) async {
+    final prefs = await _prefs;
+    final items = prefs.getStringList(_keyItems) ?? [];
+    if (index >= 0 && index < items.length) {
+      items.removeAt(index);
+      await prefs.setStringList(_keyItems, items);
+    }
+  }
 
   // Aktualisiert ein Item an einem bestimmten Index.
   Future<void> editItem(int index, String newItem);

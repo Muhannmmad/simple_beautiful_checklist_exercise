@@ -21,8 +21,17 @@ class SharedPreferencesRepository implements DatabaseRepository {
   }
 
 
-  // Fügt ein neues Item hinzu.
-  Future<void> addItem(String item);
+  @override
+  Future<void> addItem(String item) async {
+    if (item.isNotEmpty) {
+      final prefs = await _prefs;
+      final items = prefs.getStringList(_keyItems) ?? [];
+      if (!items.contains(item)) {
+        items.add(item);
+        await prefs.setStringList(_keyItems, items);
+      }
+    }
+  }
 
   // Löscht ein Item an einem bestimmten Index.
   Future<void> deleteItem(int index);

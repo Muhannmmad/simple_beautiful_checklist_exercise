@@ -26,6 +26,7 @@ class _ListScreenState extends State<ListScreen> {
     _updateList();
   }
 
+  // Updates the list of tasks
   void _updateList() async {
     _items.clear();
     _items.addAll(await widget.repository.getItems());
